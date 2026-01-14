@@ -1,0 +1,142 @@
+
+import requests
+
+url = "https://api.weatherstack.com/current?access_key={PASTE_YOUR_API_KEY_HERE}"
+
+querystring = {"query":"London;Singapur;Shanghai"}
+
+response = requests.get(url, params=querystring)
+
+print(response.json())
+
+Example API Response:
+
+The successful API request from the example above now returns real-time weather data for the city of New York, including detailed information about temperature, humidity, wind, clouds, pressure, the current time, a series of location identifiers, and more.
+
+{
+    "request": {
+        "type": "City",
+        "query": "New York, United States of America",
+        "language": "en",
+        "unit": "m"
+    },
+    "location": {
+        "name": "New York",
+        "country": "United States of America",
+        "region": "New York",
+        "lat": "40.714",
+        "lon": "-74.006",
+        "timezone_id": "America/New_York",
+        "localtime": "2019-09-07 08:14",
+        "localtime_epoch": 1567844040,
+        "utc_offset": "-4.0"
+    },
+    "current": {
+        "observation_time": "12:14 PM",
+        "temperature": 13,
+        "weather_code": 113,
+        "weather_icons": [
+            "https://assets.weatherstack.com/images/wsymbols01_png_64/wsymbol_0001_sunny.png"
+        ],
+        "weather_descriptions": [
+            "Sunny"
+        ],
+        "astro": {
+            "sunrise": "06:31 AM",
+            "sunset": "05:47 PM",
+            "moonrise": "06:56 AM",
+            "moonset": "06:47 PM",
+            "moon_phase": "Waxing Crescent",
+            "moon_illumination": 0
+        },
+        "air_quality": {
+            "co": "468.05",
+            "no2": "32.005",
+            "o3": "55",
+            "so2": "7.4",
+            "pm2_5": "6.66",
+            "pm10": "6.66",
+            "us-epa-index": "1",
+            "gb-defra-index": "1"
+        },
+        "wind_speed": 0,
+        "wind_degree": 349,
+        "wind_dir": "N",
+        "pressure": 1010,
+        "precip": 0,
+        "humidity": 90,
+        "cloudcover": 0,
+        "feelslike": 13,
+        "uv_index": 4,
+        "visibility": 16
+    }
+}
+
+API Response Objects:
+
+Response Object	Description
+request > type	Returns the type of location lookup used for this request. Possible values:
+City
+LatLon
+IP
+Zipcode
+request > query	Returns the exact location identifier query used for this request.
+request > language	Returns the ISO-Code of the language used for this request.
+request > unit	Returns the unit identifier used for this request:
+m for Metric
+s for Scientific
+f for Fahrenheit
+location > name	Returns the name of the location used for this request.
+location > country	Returns the country name associated with the location used for this request.
+location > region	Returns the region name associated with the location used for this request.
+location > lat	Returns the latitude coordinate associated with the location used for this request.
+location > lon	Returns the longitude coordinate associated with the location used for this request.
+location > timezone_id	Returns the timezone ID associated with the location used for this request. (Example: America/New_York)
+location > localtime	Returns the local time of the location used for this request. (Example: 2019-09-07 08:14)
+location > localtime_epoch	Returns the local time (as UNIX timestamp) of the location used for this request. (Example: 1567844040)
+location > utc_offset	Returns the UTC offset (in hours) of the timezone associated with the location used for this request. (Example: -4.0)
+current > observation_time	Returns the UTC time for when the returned whether data was collected.
+current > temperature	Returns the temperature in the selected unit. (Default: Celsius)
+current > weather_code	Returns the universal weather condition code associated with the current weather condition. You can download all available weather codes using this link: Download Weather Codes (ZIP file)
+current > weather_icons	Returns one or more PNG weather icons associated with the current weather condition.
+current > weather_descriptions	Returns one or more weather description texts associated with the current weather condition.
+current > ... > astro	Returns a total of 6 sub response objects containing astronomic weather details, listed and explained in detail below.
+astro > sunrise	Returns the local sunrise time in the format hh:mm am/pm.
+astro > sunset	Returns the local sunset time in the format hh:mm am/pm.
+astro > moonrise	Returns the local moonrise time in the format hh:mm am/pm.
+astro > moonset	Returns the local moonset time in the format hh:mm am/pm.
+astro > moon_phase	Returns the local moon phase. Possible values:
+New Moon
+Waxing Crescent
+First Quarter
+Waxing Gibbous
+Full Moon
+Waning Gibbous
+Last Quarter
+Waning Crescent
+astro > moon_illumination	Returns the moon illumination level as percentage.
+current > ... > air_quality	Returns a total of 8 sub response objects containing air quality details, listed and explained in detail below.
+air_quality > co	Returns Carbon Monoxide (μg/m3).
+air_quality > no2	Returns Nitrogen dioxide (μg/m3).
+air_quality > o3	Ozone (μg/m3).
+air_quality > so2	Returns Sulfur dioxide (μg/m3).
+air_quality > pm2_5	Returns PM2.5 (μg/m3).
+air_quality > pm10	PM10 (μg/m3).
+air_quality > us-epa-index	Returns US - EPA standard:
+1 means Good
+2 means Moderate
+3 means Unhealthy for sensitive group
+4 means Unhealthy
+5 means Very Unhealthy
+6 means Hazardous
+air_quality > gb-defra-index	Returns UK Defra Index
+current > wind_speed	Returns the wind speed in the selected unit. (Default: kilometers/hour)
+current > wind_degree	Returns the wind degree.
+current > wind_dir	Returns the wind direction.
+current > pressure	Returns the air pressure in the selected unit. (Default: MB - millibar)
+current > precip	Returns the precipitation level in the selected unit. (Default: MM - millimeters)
+current > humidity	Returns the air humidity level in percentage.
+current > cloudcover	Returns the cloud cover level in percentage.
+current > feelslike	Returns the "Feels Like" temperature in the selected unit. (Default: Celsius)
+current > uv_index	Returns the UV index associated with the current weather condition.
+current > visibility	Returns the visibility level in the selected unit. (Default: kilometers)

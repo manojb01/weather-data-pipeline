@@ -1,0 +1,97 @@
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:14.18
+    ports:
+      - "5001:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/airflow_init.sql:/docker-entrypoint-initdb.d/airflow_init.sql
+      - ./postgres/superset_init.sql:/docker-entrypoint-initdb.d/superset_init.sql
+    networks:
+      - data_pipeline
+    restart: unless-stopped
+
+  airflow:
+    container_name: airflow_container
+    hostname: airflow
+    image: apache/airflow:3.0.3rc5
+    ports:
+      - "8000:8080"
+    env_file:
+      - .env
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${AIRFLOW_DB_NAME}
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./dbt:/opt/airflow/dbt
+      - ./.env:/opt/airflow/.env
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - postgres
+    networks:
+      - data_pipeline
+    command: bash -c "pip install python-dotenv && airflow db migrate && airflow standalone"
+    restart: unless-stopped
+
+  dbt:
+    container_name: dbt_container
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.latest@sha256:a705312b55af0ebdd149977914c28502a382d74dca8fe51fff368371a61cc8a7
+    volumes:
+      - ./dbt:/usr/app
+      - ./dbt:/root/.dbt
+    working_dir: /usr/app
+    environment:
+      DBT_PROFILES_DIR: /root/.dbt
+    entrypoint: []
+    depends_on:
+      - postgres
+    networks:
+      - data_pipeline
+    command: sleep infinity
+
+  superset:
+    image: apache/superset:3.0.0-py310
+    container_name: superset_app
+    ports:
+      - "8088:8088"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - data_pipeline
+    restart: unless-stopped
+    command: >
+      bash -c "
+      superset db upgrade &&
+      superset fab create-admin --username ${SUPERSET_ADMIN_USERNAME} --firstname Admin --lastname User --email admin@superset.com --password ${SUPERSET_ADMIN_PASSWORD} || true &&
+      superset init &&
+      superset run -h 0.0.0.0 -p 8088 --with-threads --reload
+      "
+
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - data_pipeline
+    restart: unless-stopped
+
+networks:
+  data_pipeline:
+    name: ${DOCKER_NETWORK}
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

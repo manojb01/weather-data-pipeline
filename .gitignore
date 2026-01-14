@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker/logs/
+*.log
+
+# PostgreSQL
+postgres/data/
+*.sql.bak
+
+# DBT
+dbt/logs/
+dbt/target/
+dbt/dbt_packages/
+dbt/.user.yml
+
+# Airflow
+airflow/logs/
+airflow/plugins/
+airflow/__pycache__/
+airflow.db
+airflow.cfg
+standalone_admin_password.txt
+webserver_config.py
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.tox/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Documentation
+docs/_build/
+site/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+txt.txt
+temp/
+tmp/
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.cert
+
+# OS
+Thumbs.db
+.Trash-*

@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+- name: dev
+  database: db
+  tables:
+  - name: raw_weather_data
+    columns:
+      # Identifiers
+      - name: id
+      # Location
+      - name: city
+      - name: country
+      - name: region
+      - name: latitude
+      - name: longitude
+      - name: timezone_id
+      - name: utc_offset
+      - name: local_time
+      - name: localtime_epoch
+      # Weather
+      - name: observation_time
+      - name: temperature
+      - name: weather_code
+      - name: weather_descriptions
+      - name: weather_icon_url
+      - name: is_day
+      # Wind
+      - name: wind_speed
+      - name: wind_degree
+      - name: wind_dir
+      # Atmospheric
+      - name: pressure
+      - name: precip
+      - name: humidity
+      - name: cloudcover
+      - name: feelslike
+      - name: uv_index
+      - name: visibility
+      # Astronomical
+      - name: sunrise
+      - name: sunset
+      - name: moonrise
+      - name: moonset
+      - name: moon_phase
+      - name: moon_illumination
+      # Air Quality
+      - name: co
+      - name: no2
+      - name: o3
+      - name: so2
+      - name: pm2_5
+      - name: pm10
+      - name: us_epa_index
+      - name: gb_defra_index
+      # Metadata
+      - name: inserted_at
